@@ -1,9 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import RootComponent from './App'
 import * as serviceWorker from './serviceWorker'
-import { ApolloProvider } from '@apollo/react-hooks'
+import { ApolloProvider, useQuery } from '@apollo/react-hooks'
 
 import ApolloClient, { gql } from 'apollo-boost'
 
@@ -23,9 +22,35 @@ client
   })
   .then(result => console.log(result))
 
+const EXCHNAGE_RATES = gql`
+  {
+    rates(currency: "USD") {
+      currency
+      rate
+    }
+  }
+`
+const ExchangeRates = () => {
+  const { loading, error, data } = useQuery(EXCHNAGE_RATES)
+
+  if (loading) return <h3>Loading ...</h3>
+  if (error) return <h3>Error: </h3>
+
+  return data.rates.map(({ currency, rates }) => {
+    return (
+      <div key={currency}>
+        <h6>
+          {currency}: {rates}
+        </h6>
+      </div>
+    )
+  })
+}
+
 const App = () => (
   <ApolloProvider client={client}>
-    <RootComponent />
+    <h2>Exchange Rate app</h2>
+    <ExchangeRates />
   </ApolloProvider>
 )
 

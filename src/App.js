@@ -2,6 +2,8 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 
+// ROOT COMPONENT IS NOT USED
+
 function RootComponent() {
   return (
     <div className='App'>
